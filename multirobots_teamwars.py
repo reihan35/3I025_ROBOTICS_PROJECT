@@ -190,17 +190,19 @@ class AgentTypeA(object):
             else:
                 info=self.getRobotInfoAtSensor(3)
                 if info!=None:
-                    if info["teamname"]!="Fara":
+                    if info["teamname"]=="ContreFara":
+                        print("hello")
                         orientation=info["orientation"]
-                        self.setRotationValue(orientation)
-                        self.setTranslationValue(1)
+                        self.setRotationValue(0)
+                        #self.setRotationValue(1-orientation)
+                        self.setTranslationValue(orientation)
                     else:
-                        self.setRotationValue(1)
+                        self.setRotationValue(0)
                         self.setTranslationValue(1)
 
 
         else:#si aucun obstacles on ne change pas d'angles
-            self.setRotationValue(0)
+            self.setRotationValue(0.02)
             self.setTranslationValue(1)
 
         '''if distGauche < distDroite:
@@ -357,25 +359,7 @@ class AgentTypeB(object):
         distGauche = self.getDistanceAtSensor(2) # renvoi une valeur normalisée entre 0 et 1
         distDroite = self.getDistanceAtSensor(5) # renvoi une valeur normalisée entre 0 et 1
 
-        if self.getObjectTypeAtSensor(3) >0: #si il y a un obstacle
-            if self.getObjectTypeAtSensor(3)==1: #si c'est un mure
-                self.setRotationValue(1)
-                self.setTranslationValue(-1)
-            else:
-                info=self.getRobotInfoAtSensor(3)
-                if info!=None:
-                    if info["teamname"]!="Fara":
-                        orientation=info["orientation"]
-                        self.setRotationValue(orientation)
-                        self.setTranslationValue(1)
-                    else:
-                        self.setRotationValue(1)
-                        self.setTranslationValue(1)
-        else:#si aucun obstacles on ne change pas d'angles
-            self.setRotationValue(0)
-            self.setTranslationValue(1)
-
-        '''if distGauche < distDroite:
+        if distGauche < distDroite:
             self.setRotationValue( +1 )
         elif distGauche > distDroite:
             self.setRotationValue( -1 )
@@ -391,8 +375,8 @@ class AgentTypeB(object):
 	            print "\tSenseur #"+str(i)+" (angle: "+ str(SensorBelt[i])+"°)"
 	            print "\t\tDistance  :",self.getDistanceAtSensor(i)
 	            print "\t\tType      :",self.getObjectTypeAtSensor(i) # 0: nothing, 1: wall/border, 2: robot
-	           print "\t\tRobot info:",self.getRobotInfoAtSensor(i) # dict("id","centroid(x,y)","orientation") (if not a robot: returns None and display a warning)
-'''
+	            print "\t\tRobot info:",self.getRobotInfoAtSensor(i) # dict("id","centroid(x,y)","orientation") (if not a robot: returns None and display a warning)
+
         return
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
