@@ -71,7 +71,7 @@
 #               Affrontement sur les trois arènes inédites
 #               vous pouvez utiliser http://piratepad.net pour échanger votre fonction stepController(.))
 #       Bon courage!
-# 
+#
 # Dépendances:
 #   Python 2.x
 #   Matplotlib
@@ -108,7 +108,7 @@ maxRotationSpeed = 5
 maxTranslationSpeed = 1
 SensorBelt = [-170,-80,-40,-20,+20,40,80,+170]  # angles en degres des senseurs
 
-screen_width=512 #512,768,... -- multiples de 32  
+screen_width=512 #512,768,... -- multiples de 32
 screen_height=512 #512,768,... -- multiples de 32
 
 maxIterations = 6000 # infinite: -1
@@ -132,13 +132,13 @@ for y in range(screen_height/16):
 '''''''''''''''''''''''''''''
 
 class AgentTypeA(object):
-    
+
     agentIdCounter = 0 # use as static
     id = -1
     robot = -1
     agentType = "A"
     etat = 0
-    
+
     translationValue = 0 # ne pas modifier directement
     rotationValue = 0 # ne pas modifier directement
 
@@ -158,7 +158,7 @@ class AgentTypeA(object):
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # =-= JOUEUR A -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= 
+    # =-= JOUEUR A -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # =-=-=-=-= pour l'évaluation, seul le teamname et la fct  stepController(.)  =-=
     # =-=-=-=-= seront utilisés. Assurez-vous donc que tout votre code utile est  =-=
@@ -169,67 +169,53 @@ class AgentTypeA(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-    teamname = "Equipe Alpha" # A modifier avec le nom de votre équipe
+    teamname = "Fara" # A modifier avec le nom de votre équipe
 
     def stepController(self):
-    
+
     	# cette méthode illustre l'ensemble des fonctions et informations que vous avez le droit d'utiliser.
     	# tout votre code doit tenir dans cette méthode. La seule mémoire autorisée est la variable self.etat
     	# (c'est un entier).
-
         color( (0,255,0) )
         circle( *self.getRobot().get_centroid() , r = 22) # je dessine un rond bleu autour de ce robot
 
         distGauche = self.getDistanceAtSensor(2) # renvoi une valeur normalisée entre 0 et 1
         distDroite = self.getDistanceAtSensor(5) # renvoi une valeur normalisée entre 0 et 1
         
-        '''if distGauche < distDroite:
+        if self.getObjectTypeAtSensor(self.id)!=0:
+            if self.getObjectTypeAtSensor(self.id)==2:
+                info=self.getRobotInfoAtSensor(self.id)
+                if info!=None:
+                    if info["teamname"]!="Fara":
+                        orientation=info.orientation
+                        self.setRotationValue(orientation)
+            else:
+                if distGauche < distDroite:
+                    self.setRotationValue( +1 )
+                elif distGauche > distDroite:
+                    self.setRotationValue( -1 )
+                self.setTranslationValue(1)
+        else:
+            self.setTranslationValue(1)
+
+        return
+'''
+        if distGauche < distDroite:
             self.setRotationValue( +1 )
         elif distGauche > distDroite:
             self.setRotationValue( -1 )
         else:
-            self.setRotationValue( 0 )'''
-        
-        if self.getObjectTypeAtSensor(self.id)!=0: #si on touche un obstacle
-            if self.getObjectTypeAtSensor(self.id)==2: #si c'est un robot
-                info=self.getRobotInfoAtSensor(self.id)
-                if info!=None:
-                    if info["teamname"]=="ContreFara":
-                        print("ALLO !!!")
-                        orientation=info["orientation"]
-                        print(orientation)
-                        self.setTranslationValue(orientation)
-                        self.setRotationValue(-1)
-                                    
-            elif self.getObjectTypeAtSensor(self.id)==1: #si c'est un mur
-                
-                if distGauche < distDroite:
-                    self.setRotationValue( +1 )
-                    self.setTranslationValue(1)
-
-                elif distGauche > distDroite:
-                    self.setRotationValue( -1 )
-                    self.setTranslationValue(1)
-                else:
-                   self.setRotationValue( 0 )
-                   self.setTranslationValue(-1)
-                
-        else:
-            self.setTranslationValue(1)
             self.setRotationValue( 0 )
-            self.setTranslationValue(1)
-
+        '''
         
-		# monitoring (optionnel - changer la valeur de verbose)
-        if verbose == True:
+'''        if verbose == True:
 	        print "Robot #"+str(self.id)+" [teamname:\""+str(self.teamname)+"\"] [variable mémoire = "+str(self.etat)+"] :"
 	        for i in range(len(SensorBelt)):
 	            print "\tSenseur #"+str(i)+" (angle: "+ str(SensorBelt[i])+"°)"
 	            print "\t\tDistance  :",self.getDistanceAtSensor(i)
 	            print "\t\tType      :",self.getObjectTypeAtSensor(i) # 0: rien, 1: mur ou bord, 2: robot
 	            print "\t\tRobot info:",self.getRobotInfoAtSensor(i) # dict("id","centroid(x,y)","orientation") (si pas de robot: renvoi "None" et affiche un avertissement dans la console
-
-        return
+'''
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -238,6 +224,13 @@ class AgentTypeA(object):
     def step(self):
         self.stepController()
         self.move()
+        '''info=self.getRobotInfoAtSensor(self.id)
+        if info!=None:
+            if info["teamname"]!="Fara":
+                orientation=info.orientation
+                setTranslationValue(orientation)
+        self.stepController()
+        self.move()'''
 
     def move(self):
         self.robot.forward(self.translationValue)
@@ -286,7 +279,7 @@ class AgentTypeA(object):
             value = value * maxRotationSpeed
         self.rotationValue = value
 
-orientation
+
 '''''''''''''''''''''''''''''
 '''''''''''''''''''''''''''''
 '''  Agent "B"            '''
@@ -294,13 +287,13 @@ orientation
 '''''''''''''''''''''''''''''
 
 class AgentTypeB(object):
-    
+
     agentIdCounter = 0 # use as static
     id = -1
     robot = -1
     agentType = "B"
     etat = 0
-    
+
     translationValue = 0
     rotationValue = 0
 
@@ -326,7 +319,7 @@ class AgentTypeB(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-    teamname = "ContreFara" # A modifier avec le nom de votre équipe
+    teamname = "Equipe Test" # A modifier avec le nom de votre équipe
 
     def stepController(self):
 
@@ -335,7 +328,7 @@ class AgentTypeB(object):
 
         distGauche = self.getDistanceAtSensor(2) # renvoi une valeur normalisée entre 0 et 1
         distDroite = self.getDistanceAtSensor(5) # renvoi une valeur normalisée entre 0 et 1
-        
+
         if distGauche < distDroite:
             self.setRotationValue( +1 )
         elif distGauche > distDroite:
@@ -344,7 +337,7 @@ class AgentTypeB(object):
             self.setRotationValue( 0 )
 
         self.setTranslationValue(1) # normalisé -1,+1
-        
+
 		# monitoring (optionnel - changer la valeur de verbose)
         if verbose == True:
 	        print "Robot #"+str(self.id)+" [teamname:\""+str(self.teamname)+"\"] [variable mémoire = "+str(self.etat)+"] :"
@@ -468,13 +461,13 @@ def setupArena2():
         addObstacle(row=i,col=8)
 
 def updateSensors():
-    global sensors 
+    global sensors
     # throw_rays...(...) : appel couteux (une fois par itération du simulateur). permet de mettre à jour le masque de collision pour tous les robots.
     sensors = throw_rays_for_many_players(game,game.layers['joueur'],SensorBelt,max_radius = maxSensorDistance+game.player.diametre_robot() , show_rays=showSensors)
 
 def stepWorld():
     efface()
-    
+
     updateSensors()
 
     # chaque agent se met à jour. L'ordre de mise à jour change à chaque fois (permet d'éviter des effets d'ordre).
@@ -530,7 +523,7 @@ def displayOccupancyGrid():
     sys.stdout.write('\tFree  : ')
     sys.stdout.write(str(nothing))
     sys.stdout.write('\n')
-    sys.stdout.flush() 
+    sys.stdout.flush()
 
     return nbA,nbB,nothing
 
@@ -541,7 +534,7 @@ def onExit():
         print "Robots type A (\"" + str(AgentTypeA.teamname) + "\") wins!"
     elif ret[0] < ret[1]:
         print "Robots type B (\"" + str(AgentTypeB.teamname) + "\") wins!"
-    else: 
+    else:
         print "Nobody wins!"
     print "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n"
     print "\n[Simulation::stop]"
@@ -575,4 +568,3 @@ while iteration != maxIterations:
     if iteration % 200 == 0:
         displayOccupancyGrid()
     iteration = iteration + 1
-
