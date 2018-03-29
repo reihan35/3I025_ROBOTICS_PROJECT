@@ -172,7 +172,7 @@ class AgentTypeA(object):
     teamname = "Fara" # A modifier avec le nom de votre équipe
 
     def stepController(self):
-
+        print(type(sensors[self.robot][0]))
     	# cette méthode illustre l'ensemble des fonctions et informations que vous avez le droit d'utiliser.
     	# tout votre code doit tenir dans cette méthode. La seule mémoire autorisée est la variable self.etat
     	# (c'est un entier).
@@ -205,7 +205,10 @@ class AgentTypeA(object):
                     if info["teamname"]=="ContreFara":
                         orientation=info["orientation"]
                         print(orientation)
-                        self.setRotationValue(0)
+                        if orientation in range(self.sprite-20, self.sprite+20):
+                            self.setRotationValue(1)
+                        else:
+                            self.setRotationValue(0)
                         #self.setRotationValue(1-orientation)
                         self.setTranslationValue(orientation)
                     else:
@@ -222,54 +225,6 @@ class AgentTypeA(object):
             else:
                 self.setRotationValue(0)
             self.setTranslationValue(1)
-
-        '''if distGauche < distDroite:
-            self.setRotationValue( +1 )
-        elif distGauche > distDroite:
-            self.setRotationValue( -1 )
-        else:
-            self.setRotationValue( 0 )'''
-
-        '''if self.getObjectTypeAtSensor(self.id)!=0: #si on touche un obstacle
-            if self.getObjectTypeAtSensor(self.id)==2: #si c'est un robot
-                info=self.getRobotInfoAtSensor(self.id)
-                if info!=None:
-                    if info["teamname"]=="ContreFara":
-                        print("ALLO !!!")
-                        orientation=info["orientation"]
-                        print(orientation)
-                        self.setTranslationValue(orientation)
-                        self.setRotationValue(-1)
-
-            elif self.getObjectTypeAtSensor(self.id)==1: #si c'est un mur
-
-                if distGauche < distDroite:
-                    self.setRotationValue( +1 )
-                    self.setTranslationValue(1)
-
-                elif distGauche > distDroite:
-                    self.setRotationValue( -1 )
-                    self.setTranslationValue(1)
-                else:
-                   self.setRotationValue( 0 )
-                   self.setTranslationValue(-1)
-
-        else:
-            self.setTranslationValue(1)
-            self.setRotationValue( 0 )
-            self.setTranslationValue(1)
-
-
-		# monitoring (optionnel - changer la valeur de verbose)
-        if verbose == True:
-	        print "Robot #"+str(self.id)+" [teamname:\""+str(self.teamname)+"\"] [variable mémoire = "+str(self.etat)+"] :"
-	        for i in range(len(SensorBelt)):
-	            print "\tSenseur #"+str(i)+" (angle: "+ str(SensorBelt[i])+"°)"
-	            print "\t\tDistance  :",self.getDistanceAtSensor(i)
-	            print "\t\tType      :",self.getObjectTypeAtSensor(i) # 0: rien, 1: mur ou bord, 2: robot
-	            print "\t\tRobot info:",self.getRobotInfoAtSensor(i) # dict("id","centroid(x,y)","orientation") (si pas de robot: renvoi "None" et affiche un avertissement dans la console
-
-        return'''
 
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -607,6 +562,7 @@ else:
 setupAgents()
 game.mainiteration()
 
+
 iteration = 0
 while iteration != maxIterations:
     stepWorld()
@@ -614,3 +570,4 @@ while iteration != maxIterations:
     if iteration % 200 == 0:
         displayOccupancyGrid()
     iteration = iteration + 1
+
