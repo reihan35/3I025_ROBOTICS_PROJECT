@@ -181,22 +181,23 @@ class AgentTypeA(object):
 
         distGauche = self.getDistanceAtSensor(2) # renvoi une valeur normalisée entre 0 et 1
         distDroite = self.getDistanceAtSensor(5) # renvoi une valeur normalisée entre 0 et 1
-        
-        if self.getObjectTypeAtSensor(self.id)!=0:
-            if self.getObjectTypeAtSensor(self.id)==2:
+
+        if self.getObjectTypeAtSensor(self.id)>0: #si il y a un obstacle
+            if self.getObjectTypeAtSensor(self.id)==1: #si c'est un mure
+                self.setTranslationValue(-1)
+            else:
                 info=self.getRobotInfoAtSensor(self.id)
                 if info!=None:
                     if info["teamname"]!="Fara":
-                        orientation=info.orientation
+                        orientation=info["orientation"]
                         self.setRotationValue(orientation)
-            else:
-                if distGauche < distDroite:
-                    self.setRotationValue( +1 )
-                elif distGauche > distDroite:
-                    self.setRotationValue( -1 )
-                self.setTranslationValue(1)
-        else:
+                        self.setTranslationValue(-1)
+
+        else:#si aucun obstacles on ne change pas d'angles
+            self.setRotationValue(0)
             self.setTranslationValue(1)
+
+        #self.setTranslationValue(1)
 
         return
 '''
@@ -207,7 +208,7 @@ class AgentTypeA(object):
         else:
             self.setRotationValue( 0 )
         '''
-        
+
 '''        if verbose == True:
 	        print "Robot #"+str(self.id)+" [teamname:\""+str(self.teamname)+"\"] [variable mémoire = "+str(self.etat)+"] :"
 	        for i in range(len(SensorBelt)):
