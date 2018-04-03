@@ -205,7 +205,7 @@ class AgentTypeA(object):
                     break
                 
             if i < len(SensorBelt) - 1: 
-                if self.getObjectTypeAtSensor(i) == 2 and self.getRobotInfoAtSensor(i)["teamname"] == "ContreFara": # robot adverse
+                if self.getObjectTypeAtSensor(i) == 2 and self.getRobotInfoAtSensor(i)["teamname"] != self.robot.teamname: # robot adverse
                     self.setRotationValue(SensorBelt[i]) # le suivre
                     self.setTranslationValue(1)
                 else: # robot de notre équipe ou obstacle

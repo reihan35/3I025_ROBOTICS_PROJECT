@@ -167,22 +167,22 @@ class Agent(object):
         translation = 0
         rotation = 0
         
-        #sensorMinus80 = self.getDistanceAtSensor(1)
+        sensorMinus80 = self.getDistanceAtSensor(1)
         sensorMinus40 = self.getDistanceAtSensor(2)
         sensorMinus20 = self.getDistanceAtSensor(3)
         sensorPlus20 = self.getDistanceAtSensor(4)
         sensorPlus40 = self.getDistanceAtSensor(5)
-        #sensorPlus80 = self.getDistanceAtSensor(6)
+        sensorPlus80 = self.getDistanceAtSensor(6)
 
-        if len(self.params) != 10: # vérifie que le nombre de paramètres donné est correct
+        if len(self.params) != 14: # vérifie que le nombre de paramètres donné est correct
             print "[ERROR] number of parameters is incorrect. Exiting."
             exit()
 
         # Perceptron: a linear combination of sensory inputs with weights (=parameters). Use an additional parameters as a bias, and apply hyperbolic tangeant to ensure result is in [-1,+1]
-        #translation =  math.tanh( sensorMinus80 * self.params[0] + sensorMinus40 * self.params[1] + sensorMinus20 * self.params[2] + sensorPlus20 * self.params[3] + sensorPlus40 * self.params[4] + sensorPlus80 * self.params[5] + self.params[6] )
-        #rotation =  math.tanh( sensorMinus80 * self.params[7] + sensorMinus40 * self.params[8] + sensorMinus20 * self.params[9] + sensorPlus20 * self.params[10] + sensorPlus40 * self.params[11] + sensorPlus80 * self.params[12] + self.params[13] )
-        translation =  math.tanh( sensorMinus40 * self.params[0] + sensorMinus20 * self.params[1] + sensorPlus20 * self.params[2] + sensorPlus40 * self.params[3] + self.params[4] ) 
-        rotation =  math.tanh( sensorMinus40 * self.params[5] + sensorMinus20 * self.params[6] + sensorPlus20 * self.params[7] + sensorPlus40 * self.params[8] + self.params[9] )
+        translation =  math.tanh( sensorMinus80 * self.params[0] + sensorMinus40 * self.params[1] + sensorMinus20 * self.params[2] + sensorPlus20 * self.params[3] + sensorPlus40 * self.params[4] + sensorPlus80 * self.params[5] + self.params[6] )
+        rotation =  math.tanh( sensorMinus80 * self.params[7] + sensorMinus40 * self.params[8] + sensorMinus20 * self.params[9] + sensorPlus20 * self.params[10] + sensorPlus40 * self.params[11] + sensorPlus80 * self.params[12] + self.params[13] )
+        #translation =  math.tanh( sensorMinus40 * self.params[0] + sensorMinus20 * self.params[1] + sensorPlus20 * self.params[2] + sensorPlus40 * self.params[3] + self.params[4] ) 
+        #rotation =  math.tanh( sensorMinus40 * self.params[5] + sensorMinus20 * self.params[6] + sensorPlus20 * self.params[7] + sensorPlus40 * self.params[8] + self.params[9] )
 
         #print "robot #", self.id, "[r =",rotation," - t =",translation,"]"
 
@@ -361,14 +361,14 @@ bestFitness = 0 # init with worst value
 bestParams = []
 bestEvalIt = 0
 
-maxEvaluations = 500 # budget en terme de nombre de robots évalués au total
+maxEvaluations = 100 # budget en terme de nombre de robots évalués au total
 maxIterations = 200 # temps passé pour évaluer _un_ robot
 nbReevaluations = 4
-genomeSize = 10
+genomeSize = 14
 
 for evaluationIt in range(maxEvaluations):
 
-    print "Evaluation #", evaluationIt
+   # print "Evaluation #", evaluationIt
 
     # genere un nouveau jeu de paramètres
     params = []
@@ -385,8 +385,9 @@ for evaluationIt in range(maxEvaluations):
         bestFitness = fitness
         bestEvalIt = evaluationIt
 
-    print "\tParameters:", str(params)
-    print "\tFitness:", fitness, "(best:", bestFitness,")"
+   # print "\tParameters:", str(params)
+   # print "\tFitness:", fitness, "(best:", bestFitness,")"
+    print evaluationIt,",", fitness,",", bestFitness
 
 game.frameskip = 1 # affichage à vitesse normal
 
