@@ -172,59 +172,32 @@ class AgentTypeA(object):
     teamname = "Fara" # A modifier avec le nom de votre équipe
 
     def stepController(self):
-        print(type(sensors[self.robot][0]))
-    	# cette méthode illustre l'ensemble des fonctions et informations que vous avez le droit d'utiliser.
-    	# tout votre code doit tenir dans cette méthode. La seule mémoire autorisée est la variable self.etat
-    	# (c'est un entier).
-
-        color( (0,255,0) )
-        circle( *self.getRobot().get_centroid() , r = 22) # je dessine un rond bleu autour de ce robot
-
-        distGauche = self.getDistanceAtSensor(2) # renvoi une valeur normalisée entre 0 et 1
-        distDroite = self.getDistanceAtSensor(5) # renvoi une valeur normalisée entre 0 et 1
-
-        if self.getObjectTypeAtSensor(3) >0: #si il y a un obstacle
-            if self.getObjectTypeAtSensor(3)==1: #si c'est un mure
-                #distGauche = self.getDistanceAtSensor(3)
-                #distDroite = self.getDistanceAtSensor(5)
-
-                if distGauche < distDroite:
-                    self.setRotationValue( random.uniform(0, 1) )
-                    self.setTranslationValue(1)
-                elif distGauche > distDroite:
-                    self.setRotationValue( random.uniform(-1, 0)  )
-                    self.setTranslationValue(1)
-                else:
-                    self.setRotationValue(0.05)
-                    self.setTranslationValue(-1)
-
-                 #self.setRotationValue(random.uniform(-1, 1))
-            else:
-                info=self.getRobotInfoAtSensor(3)
-                if info!=None:
-                    if info["teamname"]=="ContreFara":
-                        orientation=info["orientation"]
-                        print(orientation)
-                        if orientation in range(self.sprite-20, self.sprite+20):
-                            self.setRotationValue(1)
-                        else:
-                            self.setRotationValue(0)
-                        #self.setRotationValue(1-orientation)
-                        self.setTranslationValue(orientation)
-                    else:
-                        self.setRotationValue(random.uniform(-1, 1))
-                        self.setTranslationValue(1)
+       if self.id == 1: # robot qui explore
+            color( (255,255,255) )
+        else:
+            color( (0,255,0) )
+        circle( *self.getRobot().get_centroid() , r = 22)
 
 
-        else:#si aucun obstacles on ne change pas d'angles
+        if self.id == 1: # robot qui explore
             
-            if distGauche < distDroite:
-                self.setRotationValue(random.uniform(0.0, 1))
-            elif distGauche > distDroite:
-                self.setRotationValue(random.uniform(-1, 0.0))
-            else:
-                self.setRotationValue(0)
-            self.setTranslationValue(1)
+                
+        else: # les autres robots suivent
+            # parcours de ses senseurs jusqu'à en trouver un qui détecte un robot
+            for i in range (len(SensorBelt)):
+                if self.getObjectTypeAtSensor(i) > 0 :
+                    break
+                
+            if i < len(SensorBelt) - 1: 
+                if self.getObjectTypeAtSensor(i) == 2 and self.getRobotInfoAtSensor(i)["teamname"] != self.robot.teamname: # robot adverse
+                    self.setRotationValue(SensorBelt[i]) # le suivre
+                    self.setTranslationValue(1)
+                else: # robot de notre équipe ou obstacle
+                    self.setRotationValue(-SensorBelt[i]) # l'éviter
+                    self.setTranslationValue(1)
+            else: # continuer tout droit
+                self.setRotationValue(random.uniform(-0.05, 0.5))
+                self.setTranslationValue(1)  
 
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
