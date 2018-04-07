@@ -170,40 +170,14 @@ class AgentTypeA(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
     teamname = "Fara" # A modifier avec le nom de votre équipe
-
+    
     def stepController(self):
-       if self.id == 1: # robot qui explore
-            color( (255,255,255) )
-        else:
-            color( (0,255,0) )
-        circle( *self.getRobot().get_centroid() , r = 22)
-
-
-        if self.id == 1: # robot qui explore
-            
-                
-        else: # les autres robots suivent
-            # parcours de ses senseurs jusqu'à en trouver un qui détecte un robot
-            for i in range (len(SensorBelt)):
-                if self.getObjectTypeAtSensor(i) > 0 :
-                    break
-                
-            if i < len(SensorBelt) - 1: 
-                if self.getObjectTypeAtSensor(i) == 2 and self.getRobotInfoAtSensor(i)["teamname"] != self.robot.teamname: # robot adverse
-                    self.setRotationValue(SensorBelt[i]) # le suivre
-                    self.setTranslationValue(1)
-                else: # robot de notre équipe ou obstacle
-                    self.setRotationValue(-SensorBelt[i]) # l'éviter
-                    self.setTranslationValue(1)
-            else: # continuer tout droit
-                self.setRotationValue(random.uniform(-0.05, 0.5))
-                self.setTranslationValue(1)  
 
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
+    
     def step(self):
         self.stepController()
         self.move()
