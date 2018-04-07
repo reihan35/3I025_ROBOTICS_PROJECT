@@ -176,10 +176,7 @@ class AgentTypeA(object):
         translation = 0
         rotation = 0
         
-        if self.id == 1: # robot qui explore
-            color( (255,255,255) )
-        else:
-            color( (0,255,0) )
+        color( (0,255,0) )
         circle( *self.getRobot().get_centroid() , r = 22)
 
 
@@ -211,13 +208,14 @@ class AgentTypeA(object):
             if i < len(SensorBelt) - 1: 
                 if self.getObjectTypeAtSensor(i) == 2 and self.getRobotInfoAtSensor(i)["teamname"] != self.robot.teamname: # robot adverse
                     self.setRotationValue(SensorBelt[i]) # le suivre
-                    self.setTranslationValue(1)
+                    #self.setTranslationValue(1)
                 else: # robot de notre équipe ou obstacle
                     self.setRotationValue(-SensorBelt[i]) # l'éviter
-                    self.setTranslationValue(1)
+                    #self.setTranslationValue(1)
             else: # continuer tout droit
-                self.setRotationValue(random.uniform(-0.05, 0.5))
-                self.setTranslationValue(1)  
+                #self.setRotationValue(random.uniform(-0.05, 0.5))
+                self.setRotationValue(0)
+            self.setTranslationValue(1)  
 
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -544,6 +542,13 @@ init('empty',MyTurtle,screen_width,screen_height) # display is re-dimensioned, t
 game.auto_refresh = False # display will be updated only if game.mainiteration() is called
 game.frameskip = frameskip
 atexit.register(onExit)
+
+############## Récupération de l'arène passée en paramètre ###############
+import sys
+if len(sys.argv) > 1: # un numéro d'arène a été passé en paramètre
+    arena = int(sys.argv[1])
+print "Arena number ", arena
+############################
 
 if arena == 0:
     setupArena0()

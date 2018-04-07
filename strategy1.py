@@ -177,10 +177,7 @@ class AgentTypeA(object):
     	# tout votre code doit tenir dans cette méthode. La seule mémoire autorisée est la variable self.etat
     	# (c'est un entier).
         
-        if self.id == 1: # robot qui explore
-            color( (255,255,255) )
-        else:
-            color( (0,255,0) )
+        color( (0,255,0) )
         circle( *self.getRobot().get_centroid() , r = 22)
 
 
@@ -193,13 +190,12 @@ class AgentTypeA(object):
             # robot ou obstacle
             if i < len(SensorBelt) - 1:
                 self.setRotationValue(-SensorBelt[i]) # on le fait aller dans la direction inverse du senseur
-                self.setTranslationValue(1)
             else:
                 self.setRotationValue(0)
-            self.setTranslationValue(1) 
+            #self.setTranslationValue(1) 
                 
         else: # les autres robots suivent
-            # parcours de ses senseurs jusqu'à en trouver un qui détecte un robot
+            # parcours de ses senseurs jusqu'à en trouver un qui détecte un robot ou un obstacle
             for i in range (len(SensorBelt)):
                 if self.getObjectTypeAtSensor(i) > 0 :
                     break
@@ -207,15 +203,16 @@ class AgentTypeA(object):
             if i < len(SensorBelt) - 1: 
                 if self.getObjectTypeAtSensor(i) == 2 and self.getRobotInfoAtSensor(i)["teamname"] != self.robot.teamname: # robot adverse
                     self.setRotationValue(SensorBelt[i]) # le suivre
-                    self.setTranslationValue(1)
+                    #self.setTranslationValue(1)
                 else: # robot de notre équipe ou obstacle
                     self.setRotationValue(-SensorBelt[i]) # l'éviter
-                    self.setTranslationValue(1)
+                    #self.setTranslationValue(1)
             else: # continuer tout droit
-                self.setRotationValue(random.uniform(-0.05, 0.5))
-                self.setTranslationValue(1)  
+                #self.setRotationValue(random.uniform(-0.05, 0.05))
+                self.setRotationValue(0)
+                #self.setTranslationValue(1)  
             
-
+        self.setTranslationValue(1)  
         '''
         	# monitoring (optionnel - changer la valeur de verbose)
         if verbose == True:
@@ -264,10 +261,10 @@ class AgentTypeA(object):
 
     def setTranslationValue(self,value):
         if value > 1:
-            print "[WARNING] translation value not in [-1,+1]. Normalizing."
+            #print "[WARNING] translation value not in [-1,+1]. Normalizing."
             value = maxTranslationSpeed
         elif value < -1:
-            print "[WARNING] translation value not in [-1,+1]. Normalizing."
+            #print "[WARNING] translation value not in [-1,+1]. Normalizing."
             value = -maxTranslationSpeed
         else:
             value = value * maxTranslationSpeed
@@ -275,10 +272,10 @@ class AgentTypeA(object):
 
     def setRotationValue(self,value):
         if value > 1:
-            print "[WARNING] translation value not in [-1,+1]. Normalizing."
+            #print "[WARNING] translation value not in [-1,+1]. Normalizing."
             value = maxRotationSpeed
         elif value < -1:
-            print "[WARNING] translation value not in [-1,+1]. Normalizing."
+            #print "[WARNING] translation value not in [-1,+1]. Normalizing."
             value = -maxRotationSpeed
         else:
             value = value * maxRotationSpeed
@@ -388,10 +385,10 @@ class AgentTypeB(object):
 
     def setTranslationValue(self,value):
         if value > 1:
-            print "[WARNING] translation value not in [-1,+1]. Normalizing."
+            #print "[WARNING] translation value not in [-1,+1]. Normalizing."
             value = maxTranslationSpeed
         elif value < -1:
-            print "[WARNING] translation value not in [-1,+1]. Normalizing."
+            #print "[WARNING] translation value not in [-1,+1]. Normalizing."
             value = -maxTranslationSpeed
         else:
             value = value * maxTranslationSpeed
@@ -399,10 +396,10 @@ class AgentTypeB(object):
 
     def setRotationValue(self,value):
         if value > 1:
-            print "[WARNING] translation value not in [-1,+1]. Normalizing."
+            #print "[WARNING] translation value not in [-1,+1]. Normalizing."
             value = maxRotationSpeed
         elif value < -1:
-            print "[WARNING] translation value not in [-1,+1]. Normalizing."
+            #print "[WARNING] translation value not in [-1,+1]. Normalizing."
             value = -maxRotationSpeed
         else:
             value = value * maxRotationSpeed
@@ -553,6 +550,14 @@ init('empty',MyTurtle,screen_width,screen_height) # display is re-dimensioned, t
 game.auto_refresh = False # display will be updated only if game.mainiteration() is called
 game.frameskip = frameskip
 atexit.register(onExit)
+
+
+############## Récupération de l'arène passée en paramètre ###############
+import sys
+if len(sys.argv) > 1: # un numéro d'arène a été passé en paramètre
+    arena = int(sys.argv[1])
+print "Arena number ", arena
+############################
 
 if arena == 0:
     setupArena0()

@@ -367,7 +367,6 @@ nbReevaluations = 4
 genomeSize = 14
 sigma = 10**-7
 params = []
-
 for i in range(genomeSize):  # taille du genome 
         params.append(randint(-10,+10))
 
