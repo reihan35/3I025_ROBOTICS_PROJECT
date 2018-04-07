@@ -172,7 +172,11 @@ class AgentTypeA(object):
     teamname = "Fara" # A modifier avec le nom de votre équipe
 
     def stepController(self):
-       if self.id == 1: # robot qui explore
+        import math
+        translation = 0
+        rotation = 0
+        
+        if self.id == 1: # robot qui explore
             color( (255,255,255) )
         else:
             color( (0,255,0) )
@@ -180,8 +184,24 @@ class AgentTypeA(object):
 
 
         if self.id == 1: # robot qui explore
-            
-                
+            params = [9.000002191688772, 8.000002191688772, -3.9999978083112318, 3.000002191688768, -7.999997808311236, 4.000002191688764, 1.0000021916887705, -1.9999978083112298, -3.9999978083112318, 1.0000021916887705, 6.000002191688764, 7.000002191688764, 2.0000021916887682, -9.999997808311228]
+
+        
+            sensorMinus80 = self.getDistanceAtSensor(1)
+            sensorMinus40 = self.getDistanceAtSensor(2)
+            sensorMinus20 = self.getDistanceAtSensor(3)
+            sensorPlus20 = self.getDistanceAtSensor(4)
+            sensorPlus40 = self.getDistanceAtSensor(5)
+            sensorPlus80 = self.getDistanceAtSensor(6)
+
+            translation =  math.tanh( sensorMinus80 * params[0] + sensorMinus40 * params[1] + sensorMinus20 * params[2] + sensorPlus20 * params[3] + sensorPlus40 * params[4] + sensorPlus80 * params[5] + params[6] )
+            rotation =  math.tanh( sensorMinus80 * params[7] + sensorMinus40 * params[8] + sensorMinus20 * params[9] + sensorPlus20 * params[10] + sensorPlus40 * params[11] + sensorPlus80 * params[12] + params[13] )
+           
+
+            self.setRotationValue( rotation )
+            self.setTranslationValue( translation )
+
+           
         else: # les autres robots suivent
             # parcours de ses senseurs jusqu'à en trouver un qui détecte un robot
             for i in range (len(SensorBelt)):
